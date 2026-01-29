@@ -1,0 +1,41 @@
+services:
+  backend:
+    build: backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/tododb
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=Yunkhngn123!
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=Yunkhngn123!
+      - POSTGRES_DB=tododb
+    volumes:
+      - db-data-prod:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data-prod:
