@@ -1,6 +1,6 @@
 package com.yunkhngn.backend.dto;
 
-import com.yunkhngn.backend.entity.TodoStatus;
+import com.yunkhngn.backend.common.TodoStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -2,7 +2,7 @@ package com.yunkhngn.backend.service;
 
 import com.yunkhngn.backend.entity.Todo;
 import com.yunkhngn.backend.entity.User;
-import com.yunkhngn.backend.entity.TodoStatus;
+import com.yunkhngn.backend.common.TodoStatus;
 import com.yunkhngn.backend.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 

@@ -13,6 +13,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=Yunkhngn123!
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JWT_SECRET=somethinginthewaynirvanasecretkey
     depends_on:
       - db
     networks:

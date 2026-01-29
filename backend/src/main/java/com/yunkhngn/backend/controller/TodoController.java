@@ -7,6 +7,8 @@ import com.yunkhngn.backend.entity.User;
 import com.yunkhngn.backend.mapper.TodoMapper;
 import com.yunkhngn.backend.repository.UserRepository;
 import com.yunkhngn.backend.service.TodoService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,20 +26,22 @@ public class TodoController {
         this.userRepository = userRepository;
     }
 
-    // TẠM: lấy user đầu tiên trong DB
-    private User getMockUser() {
-        return userRepository.findAll().get(0);
+    private User getUser(UserDetails userDetails) {
+        return userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @PostMapping
-    public TodoResponse create(@RequestBody TodoRequest req) {
-        Todo todo = todoService.createTodo(getMockUser(), req.getTitle());
+    public TodoResponse create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody TodoRequest req) {
+        User user = getUser(userDetails);
+        Todo todo = todoService.createTodo(user, req.getTitle());
         return TodoMapper.toResponse(todo);
     }
 
     @GetMapping
-    public List<TodoResponse> getAll() {
-        return todoService.getTodosByUser(getMockUser())
+    public List<TodoResponse> getAll(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = getUser(userDetails);
+        return todoService.getTodosByUser(user)
                 .stream()
                 .map(TodoMapper::toResponse)
                 .toList();
